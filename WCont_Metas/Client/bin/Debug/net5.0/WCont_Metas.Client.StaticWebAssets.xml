@@ -1,0 +1,5 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="/" Path="C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Client\bin\Debug\net5.0\wwwroot\" />
+  <ContentRoot BasePath="/" Path="C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Client\obj\Debug\net5.0\scopedcss\bundle\" />
+  <ContentRoot BasePath="_content/Syncfusion.Blazor" Path="C:\Users\core\.nuget\packages\syncfusion.blazor\18.3.0.41\build\..\staticwebassets\" />
+</StaticWebAssets>

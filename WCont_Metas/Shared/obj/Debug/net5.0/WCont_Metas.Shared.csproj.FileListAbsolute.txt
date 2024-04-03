@@ -1,0 +1,11 @@
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\bin\Debug\net5.0\WCont_Metas.Shared.deps.json
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\bin\Debug\net5.0\WCont_Metas.Shared.dll
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\bin\Debug\net5.0\WCont_Metas.Shared.pdb
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\obj\Debug\net5.0\WCont_Metas.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\obj\Debug\net5.0\WCont_Metas.Shared.AssemblyInfoInputs.cache
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\obj\Debug\net5.0\WCont_Metas.Shared.AssemblyInfo.cs
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\obj\Debug\net5.0\WCont_Metas.Shared.csproj.CoreCompileInputs.cache
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\obj\Debug\net5.0\WCont_Metas.Shared.dll
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\obj\Debug\net5.0\ref\WCont_Metas.Shared.dll
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\obj\Debug\net5.0\WCont_Metas.Shared.pdb
+C:\Users\core\source\repos\WebApiMETAS\WCont_Metas\Shared\obj\Debug\net5.0\refint\WCont_Metas.Shared.dll

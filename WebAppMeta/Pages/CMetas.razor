@@ -1,0 +1,278 @@
+﻿@page "/cMetas"
+@inject IJSRuntime JS
+@using WebAppMeta.Data
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@inject IHttpClientFactory ClientFactory
+@inject IHttpClientFactory ClientFactoryTar
+
+<div class="col-12">
+    <h1>Control de Metas</h1>
+</div>
+
+
+@if (getClienteError || imetas is null)
+{
+    <p>No se encontro la api.</p> }
+else
+{
+    <button @onclick="SetStock" style="background-color:darkcyan; border-radius:5px;">Nueva Meta</button>
+    <div class="contents">
+        <form>
+            <label for="var_IdMeta" class="form-label"></label>
+            <label for="lbl_nombres" class="form-label">Nombre</label>
+            <input @bind="var_Nombre" type="text" class="form-control" placeholder="Nombre">
+
+            <br>
+            @if (var_Nombre == null)
+            {
+                <button type="button" @onclick="Crear" class="btn btn-info">Aceptar</button>
+            }
+            else
+            {
+                <button type="button" @onclick="()=>Actualizar(var_IdMeta)" class="btn btn-info">Aceptar</button>
+            }
+
+            <button type="button" @onclick="SetStop" class="btn btn-info">Calcelar</button>
+        </form>
+        ×
+    </div>
+    <div class="col-4">
+        <ol class="list-group list-group-numbered">
+
+            @foreach (var meta in imetas)
+            {
+                <li class="list-group-item">
+                    <tr>
+                        <td>
+                            @meta.nombre
+                            <button type="button" @onclick="()=>Editar(meta.idMeta)" class="btn btn-info"><i class="oi oi-pencil"></i></button>
+                            <button type="button" @onclick="Eliminar" class="btn btn-info"><i class="oi oi-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@meta.fecha</td>
+                    </tr>
+                </li>
+                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: 50%"></div>
+                </div>
+            }
+
+        </ol>
+    </div>
+
+    <div class="col-6 align-items-end" style="left:40%; top:-100px;">
+        <button @onclick="SetStockTar" class="align-content-center" style="background-color:darkcyan; border-radius:5px;">Crear tarea</button>
+        <div class="contentsTar">
+            <form>
+                <label for="var_IdMeta" class="form-label"></label>
+                <label for="lbl_nombres" class="form-label">Nombre</label>
+                <input @bind="var_NomTarea" type="text" class="form-control" placeholder="Nombre">
+                <br>
+                @if (var_Nombre == null)
+                {
+                    <button type="button" @onclick="CrearTar" class="btn btn-info">Aceptar</button>
+                }
+                else
+                {
+                    <button type="button" @onclick="()=>Actualizar(var_IdMeta)" class="btn btn-info">Aceptar</button>
+                }
+
+                <button type="button" @onclick="SetStop" class="btn btn-info">Calcelar</button>
+            </form>
+            ×
+        </div>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
+                    <th>
+                        Tarea
+                        <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm" aria-label=".form-control-sm example">
+                    </th>
+                    <th>
+                        Fecha
+                        <div class="input-group date" data-provide="datepicker">
+                            <input class="datepicker" data-date-format="mm/dd/yyyy">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </th>
+                    <th>
+                        Estado
+                        <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm" aria-label=".form-control-sm example">
+                    </th>
+                </tr>
+            </tbody>
+            @foreach (var tare in itareas)
+            {
+                <tr>
+                    <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+                    <td>@tare.nombre</td>
+                    <td>@tare.fecha</td>
+                    <td>@tare.estado</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+
+}
+
+@code { private string? url = "https://localhost:44381/api/METAS";
+    private string? url2 = "https://localhost:44381/api/TAREAS";
+    private Int32 var_IdMeta, var_IdTarea;
+    private bool? var_Importancia, var_Estado;
+    private string? var_Nombre, var_NomTarea;
+    private DateTime? var_Fecha, var_FechaTar;
+    private int? var_IdMetaTar;
+    void enviarParametrosTareas(Int32 idTar, bool? impo, string? nomTar, DateTime? fechTar, bool? stado, int? idMetTar)
+    {
+        var_IdTarea = idTar;
+        var_Importancia = impo;
+        var_NomTarea = nomTar;
+        var_FechaTar = fechTar;
+        var_Estado = stado;
+        var_IdMetaTar = idMetTar;
+    }
+    void enviarParametros(Int32 id, string? nom, DateTime? fech)
+    {
+        var_IdMeta = id;
+        var_Nombre = nom;
+        var_Fecha = fech;
+
+    }
+    // Crear
+    private async Task Crear()
+    {
+        var metas = ClientFactory.CreateClient();
+        var addItem = new METAS { idMeta = 0, nombre = var_Nombre, fecha = DateTime.Now };
+        await metas.PostAsJsonAsync(url, addItem);
+
+        await OnInitializedAsync();
+    }
+    private async Task CrearTar()
+    {
+        var metas = ClientFactoryTar.CreateClient();
+        var addItem = new TAREAS { idTarea = 0, importancia = false, nombre = var_NomTarea, fecha = DateTime.Now, estado = false, idMeta = 1 };
+        await metas.PostAsJsonAsync(url2, addItem);
+
+        await OnInitializedAsyncTar();
+    }
+    private async Task Editar(int var_IdMet)
+    {
+        METAS imetas = new METAS();
+        var request = new HttpRequestMessage(HttpMethod.Get, url + '/' + var_IdMet);
+        request.Headers.Add("Accept", "application/vnd.github.v3+json");
+        request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+        var metas = ClientFactory.CreateClient();
+
+        var response = await metas.SendAsync(request);
+
+        using var responseStream = await response.Content.ReadAsStreamAsync();
+        imetas = await JsonSerializer.DeserializeAsync<METAS>(responseStream);
+
+        var_IdMeta = imetas.idMeta;
+        var_Nombre = imetas.nombre;
+
+        await SetStock();
+
+    }
+    // Actualizar
+    private async Task Actualizar(int var_IdMeta)
+    {
+        Console.WriteLine(var_IdMeta);
+        var metas = ClientFactory.CreateClient();
+        var addItem = new METAS { idMeta = var_IdMeta, nombre = var_Nombre, fecha = DateTime.Now };
+        await metas.PutAsJsonAsync($"{url}/{var_IdMeta}", addItem);
+
+        await OnInitializedAsync();
+    }
+    // Eliminar
+    private async Task Eliminar()
+    {
+        var metas = ClientFactory.CreateClient();
+        await metas.DeleteAsync($"{url}/{var_IdMeta}");
+        await OnInitializedAsync();
+    }
+    private IEnumerable<METAS>? imetas = Array.Empty<METAS>();
+
+    private bool getClienteError;
+    private bool shouldRender;
+
+    protected override bool ShouldRender() => shouldRender;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var request = new HttpRequestMessage(HttpMethod.Get, url);
+        request.Headers.Add("Accept", "application/vnd.github.v3+json");
+        request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+        var metas = ClientFactory.CreateClient();
+
+        var response = await metas.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            using var responseStream = await response.Content.ReadAsStreamAsync();
+            imetas = await JsonSerializer.DeserializeAsync
+                <IEnumerable<METAS>>(responseStream);
+
+        }
+        else
+        {
+            getClienteError = true;
+        }
+
+        shouldRender = true;
+        await OnInitializedAsyncTar();
+    }
+    private IEnumerable<TAREAS>? itareas = Array.Empty<TAREAS>();
+    private async Task OnInitializedAsyncTar()
+    {
+        var requestTar = new HttpRequestMessage(HttpMethod.Get, url2);
+        requestTar.Headers.Add("Accept", "application/vnd.github.v3+json");
+        requestTar.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+        var tareas = ClientFactoryTar.CreateClient();
+
+        var responseTar = await tareas.SendAsync(requestTar);
+        if (responseTar.IsSuccessStatusCode)
+        {
+            using var responseStreamTar = await responseTar.Content.ReadAsStreamAsync();
+            itareas = await JsonSerializer.DeserializeAsync
+                    <IEnumerable<TAREAS>>(responseStreamTar);
+
+            Console.WriteLine(itareas);
+        }
+        else
+        {
+            getClienteError = true;
+        }
+
+        shouldRender = true;
+    }
+
+    private async Task SetStock()
+    {
+
+        await JS.InvokeVoidAsync("togglePopup");
+    }
+    private async Task SetStockTar()
+    {
+        await JS.InvokeVoidAsync("togglePopupTar");
+    }
+    private async Task SetStop()
+    {
+
+        await JS.InvokeVoidAsync("myFuncCancel");
+    }
+
+
+
+
+}

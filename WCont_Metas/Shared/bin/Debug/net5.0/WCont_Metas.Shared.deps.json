@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "WCont_Metas.Shared/1.0.0": {
+        "runtime": {
+          "WCont_Metas.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "WCont_Metas.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
